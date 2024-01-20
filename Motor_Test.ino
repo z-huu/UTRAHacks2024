@@ -5,15 +5,15 @@ int motor2pin1 = 5;
 int   motor2pin2 = 4;
 
 void setup() {
-  // put your setup code here, to run once:
-   pinMode(motor1pin1, OUTPUT);
+// put your setup code here, to run once:
+  pinMode(motor1pin1, OUTPUT);
   pinMode(motor1pin2, OUTPUT);
-  pinMode(motor2pin1,   OUTPUT);
+  pinMode(motor2pin1, OUTPUT);
   pinMode(motor2pin2, OUTPUT);
 
   //(Optional)
-  //pinMode(9,   OUTPUT); 
-  //pinMode(10, OUTPUT);
+  pinMode(9, OUTPUT); 
+  pinMode(10, OUTPUT);
   //(Optional)
 }
 
@@ -22,8 +22,8 @@ void loop() {
 
   //Controlling speed (0   = off and 255 = max speed):     
   //(Optional)
-  //analogWrite(6, 100); //ENA   pin
-  //analogWrite(7, 200); //ENB pin
+  analogWrite(9, 100); //ENA   pin
+  analogWrite(10, 200); //ENB pin
   //(Optional)
   
   digitalWrite(motor1pin1,   HIGH);
