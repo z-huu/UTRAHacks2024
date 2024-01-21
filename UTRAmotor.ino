@@ -64,6 +64,17 @@ int delta14 = 0;
 int delta15 = 0;
 int delta16 = 0;
 
+// Voltage iteration loop
+int l = 0;
+
+double voltage = 0, avg_solar_voltage = 0;
+/*
+double avgLeft = 0, avgRight = 0, avgGo = 0;
+double left, right, front;
+*/
+
+int satisfied = 0;
+
 void setup() {
 // put your setup code here, to run once:
   Serial.begin(9600);
@@ -80,6 +91,7 @@ void setup() {
   pinMode(15, INPUT);
   pinMode(16, INPUT);
   pinMode(17, INPUT);
+  pinMode(A3, INPUT);
   //(Optional)
 }
 
@@ -162,13 +174,13 @@ void loop() {
 
     digitalWrite(motor2pin1, HIGH);
     digitalWrite(motor2pin2, LOW);
-    if ((analogRead(14) + delta14 + delta15 + 20) * 2 > 255) {
+    if ((analogRead(14) + delta14 + delta15 + 20) * 2 > 255) { //Capping values > 255
       analogWrite(9, 255);
     } else {
       analogWrite(9, (analogRead(14) + delta14 + delta15 + 20) * 2);
     }
     
-    if ((analogRead(14) + delta14 + delta16 + 20) * 2 > 255) {
+    if ((analogRead(14) + delta14 + delta16 + 20) * 2 > 255) { //Capping values > 255
       analogWrite(10, 255);
     } else {
       analogWrite(10, (analogRead(14) + delta14 + delta16 + 20) * 2); // ADJUST THESE MAYBE!
@@ -211,7 +223,7 @@ void loop() {
     digitalWrite(motor2pin2, LOW);
   }
   */
-  delay(300);
+  
   Serial.print("ALL OF THE DELTAS: ");
   Serial.print(delta15);
   Serial.print(" ");
@@ -227,5 +239,34 @@ void loop() {
   lastVal15 = analogRead(15);
   lastVal16 = analogRead(16);
 
-  Serial.println(analogRead(17) / 1023.0 * 3.3); // POTENTIAL STOP CONDITION: READ VOLTAGE ACROSS SOLAR DIODE (once Vt is hit, shut off car)
+  // Serial.println(analogRead(17) / 1023.0 * 3.3); // POTENTIAL STOP CONDITION: READ VOLTAGE ACROSS SOLAR DIODE (once Vt is hit, shut off car)
+
+  // Code for reading solar panel voltage (0-5V range)
+  for (l = 0; l < 20; l ++){
+    avg_solar_voltage += analogRead(A3)*5/1023.0;
+    /*
+    avgLeft += analogRead(16);
+    avgRight += analogRead(15);
+    avgGo += analogRead(14)/3.5;
+    */
+  }
+  // Compute Average
+  voltage = (avg_solar_voltage/20);
+  //left = avgLeft/20, right = avgRight/20, front = avgGo/20;
+  Serial.print("Voltage = ");
+  Serial.println(voltage);
+  //avg_solar_voltage = 0, avgLeft = 0, avgRight = 0, avgGo = 0;
+
+  //Code to drive seeking tendencies in extended areas of darkness
+  
+  /*
+  if ((((left+right+front)/3.0) < 60) || (voltage < 2) ) {
+    analogWrite(9, 150);
+    analogWrite(10, 150);
+  } else if ((((left+right+front)/3.0) > 60) && (voltage >= 2) ) {
+    analogWrite(9, 0);
+    analogWrite(10, 0);
+  }
+  */
+  delay(150);
 }
