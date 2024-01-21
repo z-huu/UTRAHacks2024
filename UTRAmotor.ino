@@ -22,7 +22,7 @@ void loop() {
 	myStepper.setSpeed(10);
 	myStepper.step(-stepsPerRevolution);
 	delay(1000);
-}*/
+}
 /*
 #include <Servo.h>
 Servo servo;
